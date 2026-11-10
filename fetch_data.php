@@ -1,4 +1,10 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['admin_id'])) {
+    http_response_code(401);
+    exit;
+}
 require_once 'config.php';
 
 $draw = isset($_POST['draw']) ? intval($_POST['draw']) : 1;

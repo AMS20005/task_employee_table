@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: login.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -30,6 +38,9 @@
         </table>
         
         <button id="addemployee" onclick="openAddModal()">Add Employee</button>
+        <a href="logout.php">
+            <button id="logoutBtn" type="button" style="background:#e74c3c; color:white; padding:8px 15px; text-decoration:none; border-radius:5px;">Logout</button>
+        </a>
        </div>
        
        <div id="empModal" class="modal-overlay">
@@ -64,8 +75,8 @@
        
        <div id="deleteModal" class="modal-overlay">
             <div class="modal-card" style="text-align: center;">
-                <h3 style="margin-bottom: 15px; color: #e74c3c;">Confirm Delete</h3>
-                <p style="margin-bottom: 20px; color: #555;">Are you sure you want to delete this employee?</p>
+                <h3>Confirm Delete</h3>
+                <p>Are you sure you want to delete this employee?</p>
                 <div class="modal-buttons">
                     <a id="confirmDeleteBtn" href="#" class="btn-cancel">Delete</a>
                     <button type="button" style="background: #95a5a6;" class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
@@ -99,11 +110,12 @@
                 });
             });
 
-            // فتح مودل الإضافة
+            
             function openAddModal() {
                 $('#modalTitle').text('Add Employee');
                 $('#empForm')[0].reset();
                 $('#emp_id').val('');
+                $('#empForm').attr('action', 'action.php');
                 $('#saveBtn').attr('name', 'add'); 
                 $('#empModal').css('display', 'flex');
             }
