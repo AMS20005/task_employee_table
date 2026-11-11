@@ -1,5 +1,5 @@
 <?php
-    session_start(); // يجب أن تكون في السطر الأول تماماً
+    session_start();
     
     if (!isset($_SESSION['admin_id'])) {
         header("Location: login.php");

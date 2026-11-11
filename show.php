@@ -5,6 +5,8 @@ if (!isset($_SESSION['admin_id'])) {
     header("Location: login.php");
     exit;
 }
+$isSuperAdmin = $_SESSION['admin_role'] === 'super_admin';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +22,7 @@ if (!isset($_SESSION['admin_id'])) {
     </head>
     <body >
        <div class="header" style="padding: 20px;">
+        
          <table border="1" id="employeeTable">
             <caption>Employee Table</caption>
             <thead>
@@ -36,8 +39,9 @@ if (!isset($_SESSION['admin_id'])) {
             <tbody> 
             </tbody>
         </table>
-        
-        <button id="addemployee" onclick="openAddModal()">Add Employee</button>
+        <?php if ($isSuperAdmin): ?>
+            <button id="addemployee" onclick="openAddModal()">Add Employee</button>
+        <?php endif; ?>
         <a href="logout.php">
             <button id="logoutBtn" type="button" style="background:#e74c3c; color:white; padding:8px 15px; text-decoration:none; border-radius:5px;">Logout</button>
         </a>
@@ -85,14 +89,22 @@ if (!isset($_SESSION['admin_id'])) {
        </div>
 
         <script>
+            const isSuperAdmin = <?php echo json_encode($_SESSION['admin_role'] === 'super_admin'); ?>;
+
             $(document).ready(function() {
                 $('#employeeTable').DataTable({
                     "serverSide": true,
-                    "stateSave": true,
+                    // "stateSave": true,
                     "ajax": {
                         "url": "fetch_data.php",
                         "type": "POST"
                     },
+                    "columnDefs": [
+                    {
+                        "targets": 6,
+                        "visible": isSuperAdmin
+                    }
+                    ],
                     "pageLength": 10, 
                     "info": false,
                     "lengthChange": false,
